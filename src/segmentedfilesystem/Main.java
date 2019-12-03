@@ -1,6 +1,7 @@
 package segmentedfilesystem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
     private final int portNum = 6014;
@@ -9,7 +10,7 @@ public class Main {
         
     }
 
-    class DataPacket {
+    static class DataPacket {
         byte statusByte;
         byte fileId;
         byte[] packetNumber = new byte[2];
@@ -26,16 +27,26 @@ public class Main {
                 this.header = true;
             }
             if(this.header) {
-                System.arraycopy(bytes, 2, this.data,0,1024);
+                System.arraycopy(bytes, 2, this.data,0,6);
             }
             else {
                 this.packetNumber[0] = bytes[2];
                 this.packetNumber[1] = bytes[3];
-                System.arraycopy(bytes, 4, this.data,0,1024);
+                System.arraycopy(bytes, 4, this.data,0,6);
             }
         }
     }
 
-    
+    static class FilePackets {
+        private ArrayList<DataPacket> packets;
+        private DataPacket header;
+        private HashMap<Integer, DataPacket> map;
+        public FilePackets(DataPacket header) {
+            this.header = header;
+        }
+        public void addPacket(DataPacket packet) {
+            this.packets.add(packet);
+        }
+    }
 
 }
