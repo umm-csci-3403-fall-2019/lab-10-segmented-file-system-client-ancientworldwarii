@@ -1,7 +1,8 @@
 package segmentedfilesystem;
 
 public class Main {
-    
+    private final int portNum = 6014;
+    private final String server = "csci-4409.morris.umn.edu";
     public static void main(String[] args) {
         
     }
