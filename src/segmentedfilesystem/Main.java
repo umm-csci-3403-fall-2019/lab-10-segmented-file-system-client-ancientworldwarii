@@ -1,14 +1,31 @@
 package segmentedfilesystem;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class Main {
-    private final int portNum = 6014;
-    private final String server = "csci-4409.morris.umn.edu";
-    public static void main(String[] args) {
+    private static final int portNum = 6014;
+    private static final String server = "csci-4409.morris.umn.edu";
+    public static void main(String[] args) throws IOException {
+        DatagramSocket socket = new DatagramSocket();
 
+        byte[] buff = new byte[1024];
+        InetAddress address = InetAddress.getByName(server);
+        DatagramPacket packet = new DatagramPacket(buff, buff.length, address, portNum);
+        socket.send(packet);
+
+        packet = new DatagramPacket(buff, buff.length);
+        socket.receive(packet);
+
+        String received = new String(packet.getData(), 0, packet.getLength());
+        System.out.println("Quote of the Moment: " + received);
+
+        socket.close();
     }
 
     static class DataPacket {
@@ -41,22 +58,29 @@ public class Main {
     static class FilePackets {
         private DataPacket header;
         private HashMap<Integer, DataPacket> map;
-        private int last;
+        private int last = -1;
+
+        public boolean isDone() {
+            return(last != -1 && map.size() == last+1);
+        }
+
         public FilePackets(DataPacket header) {
             this.header = header;
+            this.map = new HashMap<>();
         }
+
         public void addPacket(DataPacket packet) {
+            if(isDone()) {
+                return;
+            }
             if(packet.header){
-                header = packet;
+                return;
             }else{
                 int num = new BigInteger(packet.packetNumber).intValue();
                 if(packet.isLast){
                     last = num;
                 }
                 map.put(num, packet);
-            }
-            if(map.size() == last+1){
-                //we're done
             }
         }
     }
