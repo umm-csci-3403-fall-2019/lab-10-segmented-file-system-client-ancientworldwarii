@@ -46,7 +46,8 @@ public class ClientTest {
         System.arraycopy(temp, 0,bytes,0,7);
         Main.DataPacket packet = new Main.DataPacket(bytes);
         bytes[0] = 0;
-        Main.FilePackets file = new Main.FilePackets(new Main.DataPacket(bytes));
+        Main.FilePackets file = new Main.FilePackets();
+        file.addPacket(new Main.DataPacket(bytes));
         assertFalse(file.isDone());
         file.addPacket(packet);
         assertTrue(file.isDone());
