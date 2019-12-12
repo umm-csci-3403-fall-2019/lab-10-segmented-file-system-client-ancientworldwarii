@@ -54,5 +54,20 @@ public class ClientTest {
         file.addPacket(new Main.DataPacket(bytes));
         assertTrue(file.isDone());
     }
-
+    @Test
+    public void dataPacketgetIdFromHeaderTest() {
+        byte[] bytes = new byte[1024];
+        byte[] temp = {16,42,55,110,67,68,59};
+        byte[] temp_data = {15,42,55,110,67,68,59};
+        System.arraycopy(temp, 0, bytes,0,7);
+        Main.DataPacket dataPacket = new Main.DataPacket(temp_data);
+        Main.DataPacket headerPacket = new Main.DataPacket(bytes);
+        Main.FilePackets file = new Main.FilePackets();
+        assertEquals(-1, file.getId());
+        file.addPacket(dataPacket);
+        assertEquals(42, file.getId());
+        file.toListOfByteArrays();
+        file.addPacket(headerPacket);
+        assertEquals(42, file.getId());
+    }
 }
