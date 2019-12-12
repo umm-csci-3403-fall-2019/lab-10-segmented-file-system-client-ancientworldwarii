@@ -139,13 +139,13 @@ public class Main {
                 int num = new BigInteger(packet.packetNumber).intValue();
                 if(packet.isLast){
                     last = num;
-                    int lastNull = -1;
+                    int lastValueIdx = -1;
                     for (int i = 0; i < packet.data.length; i++) {
-                        if(packet.data[i] == 0) {
-                            lastNull = i;
-                            break;
+                        if(packet.data[i] != 0) {
+                            lastValueIdx = i;
                         }
                     }
+                    packet.data = Arrays.copyOfRange(packet.data, 0, lastValueIdx);
 
                 }
                 map.put(num, packet);
