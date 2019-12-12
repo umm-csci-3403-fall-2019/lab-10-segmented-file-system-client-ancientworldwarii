@@ -36,8 +36,7 @@ public class Main {
                 DataPacket p = new DataPacket(packet.getData());
                 int emptyFile = -1;
                 boolean written = false;
-                npack -=-1;
-                //System.out.println(npack);
+                npack -=-1; //sorry nic
                 for(int j=0; j<numFiles;j++){
                     byte fid = filePacketsArrayList.get(j).getId();
                     if(fid == p.fileId){
@@ -56,11 +55,6 @@ public class Main {
         socket.close();
         for (int i = 0; i < numFiles; i++) {
 
-            System.out.println(i);
-            System.out.println(filePacketsArrayList);
-            System.out.println(filePacketsArrayList.get(i));
-            System.out.println(filePacketsArrayList.get(i).header);
-            System.out.println(filePacketsArrayList.get(i).header.data);
             String pathString = new String(filePacketsArrayList.get(i)
                     .header
                     .data)
